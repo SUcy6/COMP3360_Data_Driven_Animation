@@ -37,7 +37,15 @@ def part1_show_T_pose(viewer, joint_names, joint_parents, joint_offsets):
                    else, the current joint global position = the sum of all parent joint offsets
         '''
         ########## Code Start ############
-
+        if parent_idx == -1:
+            global_joint_position[joint_idx] = joint_offsets[joint_idx]
+        else:
+            global_joint_position[joint_idx] = joint_offsets[joint_idx]
+            p = joint_parents[joint_idx]
+            while p != -1:
+                global_joint_position[joint_idx] = global_joint_position[joint_idx] + joint_offsets[p]
+                p = joint_parents[p]
+            global_joint_position[joint_idx] = global_joint_position[joint_idx] + joint_offsets[0]
 
         ########## Code End ############
         viewer.set_joint_position_by_name(joint_names[joint_idx], global_joint_position[joint_idx])
