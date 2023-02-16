@@ -97,6 +97,20 @@ def part2_forward_kinametic(viewer, joint_names, joint_parents, joint_offsets, j
                
     '''
     ########## Code Start ############
+    for i in range(frame_number):
+        for joint_idx in range(joint_number):
+            if(joint_parents[joint_idx] == -1): #root
+                global_joint_orientations[i][joint_idx] = joint_rotations[i][joint_idx]
+                global_joint_positions[i][joint_idx] = joint_positions[i][joint_idx]
+            else:
+                # update orientation
+                rot = R.from_quat(joint_rotations[i][joint_idx])
+                Prot = R.from_quat(global_joint_orientations[i][joint_parents[joint_idx]])
+                global_joint_orientations[i][joint_idx] = (Prot * rot).as_quat()
+
+                # update position
+                rotated_offset = Prot.apply(joint_offsets[joint_idx])
+                global_joint_positions[i][joint_idx] = global_joint_positions[i][joint_parents[joint_idx]] + rotated_offset
     
 
     ########## Code End ############
